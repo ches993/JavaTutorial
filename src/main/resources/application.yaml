@@ -1,0 +1,20 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    username: my_user
+    password: my_password
+    url: jdbc:postgresql://localhost:5432/duskadb
+  jpa:
+    properties:
+      hibernate:
+        jdbc:
+          lob:
+            non_contextual_creation: true
+          dialect: org.hibernate.dialect.PostgreSQL95Dialect
+          default_schema: public
+        org.hibernate.envers.audit_table_suffix: _AUDIT_LOG
+  hibernate:
+    ddl-auto: update
+  application:
+    name: it-community
+
