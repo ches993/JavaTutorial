@@ -1,36 +1,26 @@
 package com.example.JavaTutorial.controller;
 
+import com.example.JavaTutorial.dto.StudentDto;
 import com.example.JavaTutorial.model.Student;
-import com.example.JavaTutorial.service.StudenService;
+import com.example.JavaTutorial.service.StudentService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.persistence.EntityNotFoundException;
+import javax.validation.Valid;
 
-@RequiredArgsConstructor
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/student")
 public class StudentController {
-    
-    @Autowired
-    private final StudenService studenService;
+    private final StudentService studentService;
 
-    @GetMapping("/{name}")
-   public ResponseEntity<Student> getStudentBBuName(@PathVariable String name){
-        try{
-           return ResponseEntity.ok(studenService.getStudentByName(name));
-        } catch (EntityNotFoundException e){
-            return ResponseEntity.notFound().build();
-        }
-    }
 
-    @PostMapping("/addUser")
-    public String createUser(@RequestBody String name, String age){
-       studenService.createUser(name, age);
-       return "User was created successfully";
+    @PostMapping("createStudent")
+    public ResponseEntity<Student> createStudent(@Valid @RequestBody StudentDto studentDto){
+        return ResponseEntity.ok(studentService.registerNewStudentAccount(studentDto));
     }
 }
-
-
