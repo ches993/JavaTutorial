@@ -3,6 +3,8 @@ package com.example.JavaTutorial.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.validator.constraints.Length;
 
@@ -10,6 +12,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import java.util.Objects;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -18,6 +21,7 @@ import java.util.Objects;
 @Builder
 @Entity
 @Table(name = "student", uniqueConstraints = {@UniqueConstraint(columnNames = {"email"})})
+
 public class Student {
 
     @Id
@@ -43,6 +47,13 @@ public class Student {
     @Column(name = "email")
     private String email;
 
+
+    @JsonIgnore
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @Fetch(value = FetchMode.SELECT)
+    @JoinTable(name = "student_university", joinColumns = @JoinColumn(name = "student_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "university_id", referencedColumnName = "id"))
+    private Set<University> universities;
 
     @Override
     public String toString() {
